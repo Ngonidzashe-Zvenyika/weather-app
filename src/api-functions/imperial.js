@@ -126,7 +126,7 @@ async function getForecastWeatherImperial(location) {
     const futureWeather = extractFutureWeather(data.forecast.forecastday);
     return { currentWeather, hourlyForecast, futureWeather };
   } catch (error) {
-    console.log(error);
+    console.log('Invalid Location / Server Down');
   }
 }
 
