@@ -1,4 +1,3 @@
-import { getForecastWeatherMetric } from './api-functions/metric.js';
-import { getForecastWeatherImperial } from './api-functions/imperial.js';
-
-console.log(await getForecastWeatherMetric('harare'));
+import './style.css';
+import { renderApplication } from './render.js';
+renderApplication('australia');

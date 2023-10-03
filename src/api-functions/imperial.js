@@ -1,21 +1,30 @@
 import { format, parseISO } from 'date-fns';
 
-function determineUvIndex(value) {
-  let uvIndex;
+function formatDate(date) {
+  if (date.length < 16) {
+    let substringOne = date.substring(0, 11);
+    substringOne += 0;
+    const substringTwo = date.substring(11);
+    date = substringOne + substringTwo;
+  }
+  return format(parseISO(date), 'EE, HH:mm');
+}
+
+function determineUvIndex(uvIndex) {
   switch (true) {
-    case value < 3:
+    case uvIndex < 3:
       uvIndex = 'Low';
       break;
-    case value < 6:
+    case uvIndex < 6:
       uvIndex = 'Moderate';
       break;
-    case value < 8:
+    case uvIndex < 8:
       uvIndex = 'High';
       break;
-    case value < 11:
+    case uvIndex < 11:
       uvIndex = 'Very High';
       break;
-    case value >= 11:
+    case uvIndex >= 11:
       uvIndex = 'Extremely High';
       break;
   }
@@ -24,13 +33,13 @@ function determineUvIndex(value) {
 
 function extractCurrentWeather(data, today) {
   const currentWeather = {
-    date: format(parseISO(data.location.localtime), 'EE, HH:mm'),
+    date: formatDate(data.location.localtime),
     location: data.location.name,
     country: data.location.country,
     condition: data.current.condition,
     feelsLike: `${data.current.feelslike_f}°`,
     humidity: `${data.current.humidity}%`,
-    temp: data.current.temp_f,
+    temp: `${data.current.temp_f}°`,
     uvIndex: determineUvIndex(data.current.uv),
     wind: `${data.current.wind_mph} mph`,
     sunrise: today.astro.sunrise,
@@ -41,11 +50,21 @@ function extractCurrentWeather(data, today) {
   return currentWeather;
 }
 
-function determineHourlyForecast(today, tomorrow) {
-  const time = format(new Date(), 'H');
+function determineCurrentHour(date) {
+  if (date.length < 16) {
+    let substringOne = date.substring(0, 11);
+    substringOne += 0;
+    const substringTwo = date.substring(11);
+    date = substringOne + substringTwo;
+  }
+  return format(parseISO(date), 'H');
+}
+
+function determineHourlyForecast(data, today, tomorrow) {
+  const currentHour = determineCurrentHour(data.location.localtime);
   const hourlyForecast = [];
   today.hour.forEach((hour, index) => {
-    if (index >= time) {
+    if (index >= currentHour) {
       hourlyForecast.push({
         chanceOfRain: `${hour.chance_of_rain}%`,
         conditon: hour.condition,
@@ -58,7 +77,7 @@ function determineHourlyForecast(today, tomorrow) {
   });
   if (hourlyForecast.length < 24) {
     tomorrow.hour.forEach((hour, index) => {
-      if (index < time) {
+      if (index < currentHour) {
         hourlyForecast.push({
           chanceOfRain: `${hour.chance_of_rain}%`,
           conditon: hour.condition,
@@ -84,7 +103,7 @@ function extractFutureWeather(forecast) {
     }
     futureWeather.push({
       condition: day.day.condition,
-      chanceOfRain: `${day.day.daily_chance_of_rain}%`,
+      chanceOfRain: `${day.day.daily_fhance_of_rain}%`,
       minTemp: `${day.day.mintemp_f}°`,
       maxTemp: `${day.day.maxtemp_f}°`,
       dayOfWeek,
@@ -100,11 +119,10 @@ async function getForecastWeatherImperial(location) {
       { mode: 'cors' },
     );
     const data = await response.json();
-    console.log(data);
     const today = data.forecast.forecastday[0];
     const tomorrow = data.forecast.forecastday[1];
     const currentWeather = extractCurrentWeather(data, today);
-    const hourlyForecast = determineHourlyForecast(today, tomorrow);
+    const hourlyForecast = determineHourlyForecast(data, today, tomorrow);
     const futureWeather = extractFutureWeather(data.forecast.forecastday);
     return { currentWeather, hourlyForecast, futureWeather };
   } catch (error) {
