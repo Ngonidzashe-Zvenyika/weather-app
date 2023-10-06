@@ -38,7 +38,7 @@ body {
 
 header {
   position: sticky;
-  z-index: 2;
+  z-index: 3;
   top: 0;
   display: flex;
   flex-wrap: wrap;
@@ -160,6 +160,7 @@ main {
 
 .frame {
   position: relative;
+  z-index: 2;
   border: 1px solid var(--color-three);
   border-radius: 20px;
   background-color: var(--color-two);
