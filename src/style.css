@@ -92,8 +92,8 @@ header {
 .scale-buttons button {
   border: none;
   appearance: none;
-  outline: 2px solid var(--color-three);
   padding: 5px 10px;
+  border: 2px solid var(--color-three);
   border-radius: 20px;
   background-color: var(--color-two);
 }
