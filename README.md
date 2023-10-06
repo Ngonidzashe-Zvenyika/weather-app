@@ -1,9 +1,11 @@
-# weather App
+# Project: Weather App
+
+`Project: No.12`
 
 ## Purpose
 
 1. Make use of an `API` in a web application
-2. Make use of `asynchronous javascript functions` to ensure data is retrieved and processed correctly.
+2. Make use of `asynchronous javascript functions` to ensure data is retrieved and processed correctly
 
 ## Skills Used
 
