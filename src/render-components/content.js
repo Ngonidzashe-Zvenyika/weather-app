@@ -1,85 +1,12 @@
-import search from './assets/search.svg';
 import rain from './assets/water-outline.svg';
 import sunup from './assets/sunrise.png';
 import sundown from './assets/sunset.png';
 import windIcon from './assets/wind.png';
 import humidIcon from './assets/humidity.png';
 import uvIcon from './assets/uv.png';
-import { getForecastWeatherMetric } from './api-functions/metric.js';
-import { getForecastWeatherImperial } from './api-functions/imperial.js';
-
-let scale = 'metric';
-let currentLocation = 'Harare';
-
-function renderSearchBar() {
-  const searchBarContainer = document.createElement('form');
-  searchBarContainer.classList.add('search-bar');
-
-  const input = document.createElement('input');
-  input.placeholder = 'Search City or Country';
-  input.value = 'Harare';
-  input.required = true;
-  searchBarContainer.appendChild(input);
-
-  const searchButton = document.createElement('button');
-  searchButton.type = 'submit';
-  searchButton.addEventListener('click', (event) => {
-    if (input.value === '') return;
-    event.preventDefault();
-    const body = document.querySelector('body');
-    currentLocation = input.value;
-    renderMain(body, input.value);
-  });
-
-  const searchIcon = document.createElement('img');
-  searchIcon.src = search;
-  searchButton.appendChild(searchIcon);
-
-  searchBarContainer.appendChild(searchButton);
-  return searchBarContainer;
-}
-
-function renderScaleButtons() {
-  const scaleButtonContainer = document.createElement('div');
-  scaleButtonContainer.classList.add('scale-button-container');
-  const metricButton = document.createElement('button');
-  metricButton.innerText = '°C - km/h';
-  metricButton.classList.add('active');
-  scaleButtonContainer.appendChild(metricButton);
-  const imperialButton = document.createElement('button');
-  imperialButton.innerText = '°F - mph';
-
-  const buttons = [metricButton, imperialButton];
-  buttons.forEach((button) => {
-    button.addEventListener('click', () => {
-      if (button === metricButton && scale !== 'metric') {
-        scale = 'metric';
-        metricButton.classList.add('active');
-        imperialButton.classList.remove('active');
-        const body = document.querySelector('body');
-        renderMain(body, currentLocation);
-      } else if (button === imperialButton && scale !== 'imperial') {
-        scale = 'imperial';
-        imperialButton.classList.add('active');
-        metricButton.classList.remove('active');
-        const body = document.querySelector('body');
-        renderMain(body, currentLocation);
-      }
-    });
-  });
-
-  scaleButtonContainer.appendChild(imperialButton);
-  return scaleButtonContainer;
-}
-
-function renderHeader(body) {
-  const header = document.createElement('header');
-  const searchBar = renderSearchBar();
-  header.appendChild(searchBar);
-  const scaleButtons = renderScaleButtons();
-  header.appendChild(scaleButtons);
-  body.appendChild(header);
-}
+import { getScale } from './render.js';
+import { getForecastWeatherMetric } from '../api-functions/metric.js';
+import { getForecastWeatherImperial } from '../api-functions/imperial.js';
 
 function renderCurrentWeather(currentWeather) {
   const currentWeatherContainer = document.createElement('div');
@@ -277,12 +204,14 @@ function load() {
   return new Promise((resolve) => setTimeout(resolve, 750));
 }
 
-async function renderMain(body, location) {
+async function renderContent(location) {
+  const body = document.querySelector('body');
   const loader = document.createElement('div');
   loader.classList.add('loader');
   body.appendChild(loader);
 
   const currentDetails = document.querySelector('main');
+  const scale = getScale();
   if (currentDetails) currentDetails.replaceChildren();
   const data =
     scale === 'metric'
@@ -327,18 +256,4 @@ async function renderMain(body, location) {
   body.removeChild(loader);
 }
 
-function renderFooter(body) {
-  const footer = document.createElement('footer');
-  footer.innerHTML =
-    'Made by <a href="https://github.com/Ngonidzashe-Zvenyika">Ngonidzashe Zvenyika</a> | Powered by <a href="https://www.weatherapi.com/" title="Free Weather API">WeatherAPI.com</a>';
-  body.appendChild(footer);
-}
-
-async function renderApplication(location) {
-  const body = document.querySelector('body');
-  renderHeader(body);
-  await renderMain(body, location);
-  renderFooter(body);
-}
-
-export { renderApplication };
+export { renderContent };

@@ -1,6 +1,7 @@
 @font-face {
   font-family: Dosis;
-  src: url(./assets/Dosis-VariableFont_wght.ttf) format('truetype');
+  src: url(./render-components/assets/Dosis-VariableFont_wght.ttf)
+    format('truetype');
 }
 
 :root {
