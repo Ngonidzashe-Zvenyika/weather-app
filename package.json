@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack": "webpack --watch",
     "eslint": "init @eslint/config",
-    "format": "eslint-config-prettier"
+    "format": "eslint-config-prettier",
+    "gh-pages": "git subtree push --prefix dist origin gh-pages"
   },
   "keywords": [],
   "author": "",
