@@ -6,6 +6,12 @@
 
 :root {
   font-size: 62.5%;
+  --color-one: hsl(210, 75%, 75%);
+  --color-two: white;
+  --color-three: black;
+  --color-four: hsl(95, 75%, 75%);
+  --color-five: hsla(0, 0%, 0%, 0);
+  --color-six: silver;
 }
 
 *,
@@ -26,48 +32,46 @@ body {
   max-width: 2560px;
   min-height: 100vh;
   min-height: 100svh;
-  background: linear-gradient(to bottom, hsl(212, 77%, 76%), white);
-  color: black;
+  background: linear-gradient(to bottom, var(--color-one), var(--color-two));
   margin: auto;
 }
 
 header {
   position: sticky;
-  top: 0;
   z-index: 2;
+  top: 0;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 20px;
   padding: 20px;
-  flex-wrap: wrap;
-  background-color: hsl(212, 77%, 76%);
-  box-shadow: 0px 0px 5px black;
+  background-color: var(--color-one);
+  box-shadow: 0px 2px 5px var(--color-three);
 }
 
 .search-bar {
   display: flex;
   align-items: center;
   padding: 2px 10px 3px 15px;
-  border: 2px solid #000000;
+  border: 2px solid var(--color-three);
   border-radius: 20px;
-  background-color: white;
-}
-
-.search-bar button {
-  appearance: none;
-  border: none;
-  outline: none;
-  height: 25px;
-  margin-bottom: 2px;
-  background-color: white;
+  background-color: var(--color-two);
 }
 
 .search-bar input {
   border: none;
   outline: none;
-  background-color: white;
   width: 200px;
+  background-color: var(--color-two);
+}
+
+.search-bar button {
+  border: none;
+  outline: none;
+  appearance: none;
+  height: 25px;
+  background-color: var(--color-two);
 }
 
 .search-bar img {
@@ -78,27 +82,28 @@ header {
   cursor: pointer;
 }
 
-.scale-button-container {
+.scale-buttons {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 20px;
 }
 
-.scale-button-container button {
-  appearance: none;
+.scale-buttons button {
   border: none;
-  outline: 2px solid black;
+  appearance: none;
+  outline: 2px solid var(--color-three);
   padding: 5px 10px;
   border-radius: 20px;
-  background-color: white;
+  background-color: var(--color-two);
 }
 
-.scale-button-container button:hover {
+.scale-buttons button:hover {
   cursor: pointer;
 }
 
-.scale-button-container button.active {
-  background-color: hsl(94, 77%, 76%);
+.scale-buttons button.active {
+  background-color: var(--color-four);
 }
 
 main {
@@ -108,75 +113,57 @@ main {
   justify-content: center;
   align-content: start;
   gap: 40px;
-  padding: 40px 20px 20px;
+  padding: 40px 20px 0px;
 }
 
-.current-weather-container {
+.current-weather {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-  align-items: start;
+  justify-content: center;
+  align-items: center;
   gap: 30px;
-  background-color: white;
   padding: 15px;
+  border: 1px solid var(--color-three);
   border-radius: 20px;
-  border: 1px solid black;
+  background-color: var(--color-two);
 }
 
-.current-weather-container img {
-  height: 110px;
+.current-weather img {
+  height: 120px;
 }
 
-.current-weather-container .date {
+.current-weather .date {
   font-size: 2rem;
 }
 
-.current-weather-container .location {
+.current-weather .location {
   font-size: 3rem;
-  /* max-width: 300px; */
 }
 
-.weather-details-container {
+.current-weather .details {
   display: flex;
   align-items: center;
 }
 
-.weather-details-container > p {
+.current-weather .details > p {
   font-size: 5rem;
   font-weight: 700;
   padding-right: 10px;
 }
 
-.weather-details-container > div {
-  /* display: grid; */
+.current-weather .details > div {
+  display: grid;
   gap: 5px;
   padding-left: 10px;
-  border-left: 2px solid black;
-}
-
-.track {
-  transform: translateX(-20px);
-  display: flex;
-  width: calc(100% + 40px);
-  padding: 15px;
-  overflow-x: scroll;
-  gap: 15px;
-}
-
-.track .container:first-child {
-  margin-left: 20px;
-}
-
-.track .container:last-child {
-  margin-right: 20px;
+  border-left: 2px solid var(--color-three);
 }
 
 .frame {
   position: relative;
+  border: 1px solid var(--color-three);
   border-radius: 20px;
+  background-color: var(--color-two);
   overflow: hidden;
-  border: 1px solid black;
-  background-color: white;
 }
 
 .frame::before {
@@ -187,12 +174,11 @@ main {
   top: 0;
   bottom: 0;
   left: 0;
-  background: linear-gradient(to right, silver, rgba(255, 255, 255, 0));
+  background: linear-gradient(to right, var(--color-six), var(--color-five));
   pointer-events: none;
 }
 
 .frame::after {
-  pointer-events: none;
   content: '';
   position: absolute;
   z-index: 1;
@@ -200,23 +186,36 @@ main {
   top: 0;
   bottom: 0;
   right: 0;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0), silver);
+  background: linear-gradient(to right, var(--color-five), var(--color-six));
+  pointer-events: none;
 }
 
-.track > .container {
+.track {
+  display: flex;
+  gap: 15px;
+  width: calc(100% + 40px);
+  transform: translateX(-20px);
+  padding: 20px 15px;
+  overflow-x: scroll;
+}
+
+.track .hour {
   display: grid;
-  grid-template-rows: auto auto auto auto;
-  gap: 10px;
   justify-items: center;
+  gap: 20px;
 }
 
-.track > .container > img:first-of-type {
+.track .hour:first-child {
+  margin-left: 20px;
+}
+
+.track .hour:last-child {
+  margin-right: 20px;
+}
+
+.track .condition {
   height: 50px;
   width: 50px;
-}
-
-.icon {
-  height: 15px;
 }
 
 .chance-of-rain {
@@ -224,60 +223,51 @@ main {
   align-items: center;
 }
 
-.future-weather-container {
-  background-color: white;
-  border: 1px solid black;
-  border-radius: 20px;
+.rain-drop {
+  height: 15px;
+}
+
+.future-weather {
+  text-align: center;
   padding: 0px 15px;
+  border: 1px solid var(--color-three);
+  border-radius: 20px;
+  background-color: var(--color-two);
 }
 
-.day > img {
-  grid-column: 1 / 2;
-  grid-row: 1 / 2;
-  height: 50px;
-}
-
-.day {
+.future-weather .day {
   padding-bottom: 15px;
   display: grid;
-  grid-template-columns: 100px 1fr auto;
+  grid-template-columns: 95px 1fr auto;
   align-items: end;
   gap: 20px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid var(--color-three);
 }
 
-.day .chance-of-rain {
-  flex: 1;
-  display: flex;
-  justify-content: end;
-}
-
-.day:last-child {
+.future-weather .day:last-child {
   border-bottom: none;
 }
 
-.day-and-image {
-  justify-items: center;
+.future-weather .day-and-image {
   display: grid;
-  /* justify-items: center; */
+  justify-items: center;
 }
 
-.day > :last-child {
-  text-align: center;
-  justify-self: center;
+.future-weather .chance-of-rain {
+  justify-content: end;
 }
 
 .astro-data {
   display: flex;
   justify-content: space-evenly;
   gap: 30px;
-  background-color: white;
-  border: 1px solid black;
+  background-color: var(--color-two);
+  border: 1px solid var(--color-three);
   border-radius: 20px;
   padding: 20px 0px;
 }
 
-.astro {
+.astro-data .container {
   display: grid;
   justify-items: center;
   gap: 10px;
@@ -291,41 +281,37 @@ main {
 .extra-data {
   display: flex;
   justify-content: space-evenly;
-  background-color: white;
-  border: 1px solid black;
+  background-color: var(--color-two);
+  border: 1px solid var(--color-three);
   border-radius: 20px;
   padding: 20px 10px;
   gap: 10px;
 }
 
-.extra {
+.extra-data .container {
+  text-align: center;
   display: grid;
   justify-items: center;
   gap: 10px;
 }
 
-.extra p {
-  text-align: center;
-}
-
 .error {
   text-align: center;
   padding: 10px;
-  border: 1px solid black;
-  background-color: white;
+  border: 1px solid var(--color-three);
+  background-color: var(--color-two);
   border-radius: 20px;
 }
 
 .loader {
-  z-index: 5;
   position: fixed;
   top: 200px;
   left: calc(50% - 50px);
-  border: 16px solid white; /* Light grey */
-  border-top: 16px solid hsl(94, 77%, 76%); /* Blue */
-  border-radius: 50%;
   width: 100px;
   height: 100px;
+  border: 16px solid var(--color-two);
+  border-top: 16px solid var(--color-four);
+  border-radius: 50%;
   animation: spin 2s linear infinite;
 }
 

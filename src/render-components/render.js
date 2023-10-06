@@ -11,6 +11,7 @@ function setScale(value) {
   scale = value;
 }
 
+// This function waits for content to load before rendering the footer;
 async function renderApplication(location) {
   renderHeader();
   await renderContent(location);

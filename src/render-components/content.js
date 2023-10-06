@@ -1,129 +1,212 @@
-import rain from './assets/water-outline.svg';
-import sunup from './assets/sunrise.png';
-import sundown from './assets/sunset.png';
+import rainIcon from './assets/water-outline.svg';
+import sunriseIcon from './assets/sunrise.png';
+import sunsetIcon from './assets/sunset.png';
 import windIcon from './assets/wind.png';
-import humidIcon from './assets/humidity.png';
+import humidityIcon from './assets/humidity.png';
 import uvIcon from './assets/uv.png';
 import { getScale } from './render.js';
 import { getForecastWeatherMetric } from '../api-functions/metric.js';
 import { getForecastWeatherImperial } from '../api-functions/imperial.js';
 
+// This function renders components to display the current weather information;
 function renderCurrentWeather(currentWeather) {
-  const currentWeatherContainer = document.createElement('div');
-  currentWeatherContainer.classList.add('current-weather-container');
+  const container = document.createElement('div');
+  container.classList.add('current-weather');
 
-  const currentWeatherImage = document.createElement('img');
+  const image = document.createElement('img');
   const imageUrl = `./weather-icons/${currentWeather.condition.icon.substring(
     35,
   )}`;
-  currentWeatherImage.src = imageUrl;
-  currentWeatherContainer.appendChild(currentWeatherImage);
+  image.src = imageUrl;
+  container.appendChild(image);
 
-  const currentWeatherText = document.createElement('div');
-  currentWeatherText.classList.add('current-weather-text');
+  const textContainer = document.createElement('div');
+
   const date = document.createElement('p');
   date.classList.add('date');
   date.innerText = currentWeather.date;
-  currentWeatherText.appendChild(date);
+  textContainer.appendChild(date);
+
   const location = document.createElement('p');
   location.classList.add('location');
   location.innerText = `${currentWeather.location}, ${currentWeather.country}`;
-  currentWeatherText.appendChild(location);
-  const weatherDetailsContainer = document.createElement('div');
-  weatherDetailsContainer.classList.add('weather-details-container');
-  const temperature = document.createElement('p');
-  temperature.innerText = currentWeather.temp;
-  weatherDetailsContainer.appendChild(temperature);
-  const groupedDetails = document.createElement('div');
-  const weatherConditionText = document.createElement('p');
-  weatherConditionText.innerText = `${currentWeather.condition.text},`;
-  groupedDetails.appendChild(weatherConditionText);
+  textContainer.appendChild(location);
+
+  const details = document.createElement('div');
+  details.classList.add('details');
+
+  const temp = document.createElement('p');
+  temp.innerText = currentWeather.temp;
+  details.appendChild(temp);
+
+  const detailGroup = document.createElement('div');
+
+  const condition = document.createElement('p');
+  condition.innerText = `${currentWeather.condition.text},`;
+  detailGroup.appendChild(condition);
+
   const feelsLike = document.createElement('p');
   feelsLike.innerText = `Feels like ${currentWeather.feelsLike}`;
-  groupedDetails.appendChild(feelsLike);
-  weatherDetailsContainer.appendChild(groupedDetails);
-  currentWeatherText.appendChild(weatherDetailsContainer);
-  currentWeatherContainer.appendChild(currentWeatherText);
+  detailGroup.appendChild(feelsLike);
 
-  return currentWeatherContainer;
+  details.appendChild(detailGroup);
+
+  textContainer.appendChild(details);
+
+  container.appendChild(textContainer);
+  return container;
 }
 
+// This function renders components to display the 24 hour forecast information;
 function renderHourlyForecast(hourlyForecast) {
   const frame = document.createElement('div');
   frame.classList.add('frame');
+
   const track = document.createElement('div');
   track.classList.add('track');
+
   hourlyForecast.forEach((hour) => {
     const container = document.createElement('div');
-    container.classList.add('container');
+    container.classList.add('hour');
+
     const time = document.createElement('p');
     time.innerText = hour.time;
     container.appendChild(time);
+
     const condition = document.createElement('img');
+    condition.classList.add('condition');
     const imageUrl = `./weather-icons/${hour.conditon.icon.substring(35)}`;
     condition.src = imageUrl;
     container.appendChild(condition);
+
     const temp = document.createElement('p');
     temp.innerText = hour.temp;
     container.appendChild(temp);
+
     const chanceOfRain = document.createElement('div');
     chanceOfRain.classList.add('chance-of-rain');
+
     const raindrop = document.createElement('img');
-    raindrop.classList.add('icon');
-    raindrop.src = rain;
+    raindrop.classList.add('rain-drop');
+    raindrop.src = rainIcon;
     chanceOfRain.appendChild(raindrop);
+
     const raintext = document.createElement('p');
     raintext.innerText = hour.chanceOfRain;
     chanceOfRain.appendChild(raintext);
+
     container.appendChild(chanceOfRain);
+
     track.appendChild(container);
   });
+
   frame.appendChild(track);
   return frame;
 }
 
+// This function renders components to display the daily forecast over the next three days;
 function renderFutureWeather(futureWeather) {
   const container = document.createElement('div');
-  container.classList.add('future-weather-container');
+  container.classList.add('future-weather');
+
   futureWeather.forEach((day) => {
     const forecast = document.createElement('div');
     forecast.classList.add('day');
+
     const dayAndImage = document.createElement('div');
     dayAndImage.classList.add('day-and-image');
+
     const condition = document.createElement('img');
     const imageUrl = `./weather-icons/${day.condition.icon.substring(35)}`;
     condition.src = imageUrl;
     dayAndImage.appendChild(condition);
+
     const dayOfWeek = document.createElement('p');
     dayOfWeek.innerText = day.dayOfWeek;
     dayAndImage.appendChild(dayOfWeek);
+
     forecast.appendChild(dayAndImage);
+
     const chanceOfRain = document.createElement('div');
     chanceOfRain.classList.add('chance-of-rain');
+
     const raindrop = document.createElement('img');
-    raindrop.classList.add('icon');
-    raindrop.src = rain;
+    raindrop.classList.add('rain-drop');
+    raindrop.src = rainIcon;
     chanceOfRain.appendChild(raindrop);
+
     const raintext = document.createElement('p');
     raintext.innerText = day.chanceOfRain;
     chanceOfRain.appendChild(raintext);
+
     forecast.appendChild(chanceOfRain);
+
     const temp = document.createElement('p');
     temp.innerText = `${day.maxTemp} / ${day.minTemp}`;
     forecast.appendChild(temp);
+
     container.appendChild(forecast);
   });
+
+  return container;
+} // This function renders components to display additional information that is related to the current weather;
+function renderExtraData(currentWeather) {
+  const container = document.createElement('div');
+  container.classList.add('extra-data');
+
+  const { humidity, uvIndex, wind } = currentWeather;
+
+  const uv = document.createElement('div');
+  uv.classList.add('container');
+  const uvImage = document.createElement('img');
+  uvImage.src = uvIcon;
+  uv.appendChild(uvImage);
+  const uvText = document.createElement('p');
+  uvText.innerText = 'UV Index';
+  uv.appendChild(uvText);
+  const uvValue = document.createElement('p');
+  uvValue.innerText = uvIndex;
+  uv.appendChild(uvValue);
+  container.appendChild(uv);
+
+  const humidityReading = document.createElement('div');
+  humidityReading.classList.add('container');
+  const humidityImage = document.createElement('img');
+  humidityImage.src = humidityIcon;
+  humidityReading.appendChild(humidityImage);
+  const humidityText = document.createElement('p');
+  humidityText.innerText = 'Humidity';
+  humidityReading.appendChild(humidityText);
+  const humidityValue = document.createElement('p');
+  humidityValue.innerText = humidity;
+  humidityReading.appendChild(humidityValue);
+  container.appendChild(humidityReading);
+
+  const windSpeed = document.createElement('div');
+  windSpeed.classList.add('container');
+  const windImage = document.createElement('img');
+  windImage.src = windIcon;
+  windSpeed.appendChild(windImage);
+  const windText = document.createElement('p');
+  windText.innerText = 'Wind';
+  windSpeed.appendChild(windText);
+  const windValue = document.createElement('p');
+  windValue.innerText = wind;
+  windSpeed.appendChild(windValue);
+  container.appendChild(windSpeed);
+
   return container;
 }
 
+// This function renders components to display the sunset and sunrise times;
 function renderAstroData(currentWeather) {
-  const astroData = document.createElement('div');
-  astroData.classList.add('astro-data');
+  const container = document.createElement('div');
+  container.classList.add('astro-data');
 
   const { sunrise, sunset } = currentWeather;
 
   const rise = document.createElement('div');
-  rise.classList.add('astro');
+  rise.classList.add('container');
   const riseText = document.createElement('p');
   riseText.innerText = 'Sunrise';
   rise.appendChild(riseText);
@@ -131,12 +214,12 @@ function renderAstroData(currentWeather) {
   riseTime.innerText = sunrise;
   rise.appendChild(riseTime);
   const riseImage = document.createElement('img');
-  riseImage.src = sunup;
+  riseImage.src = sunriseIcon;
   rise.appendChild(riseImage);
-  astroData.appendChild(rise);
+  container.appendChild(rise);
 
   const set = document.createElement('div');
-  set.classList.add('astro');
+  set.classList.add('container');
   const setText = document.createElement('p');
   setText.innerText = 'Sunset';
   set.appendChild(setText);
@@ -144,75 +227,40 @@ function renderAstroData(currentWeather) {
   setTime.innerText = sunset;
   set.appendChild(setTime);
   const setImage = document.createElement('img');
-  setImage.src = sundown;
+  setImage.src = sunsetIcon;
   set.appendChild(setImage);
-  astroData.appendChild(set);
+  container.appendChild(set);
 
-  return astroData;
+  return container;
 }
 
-function renderExtraData(currentWeather) {
-  const extraData = document.createElement('div');
-  extraData.classList.add('extra-data');
-
-  const { humidity, uvIndex, wind } = currentWeather;
-
-  const uv = document.createElement('div');
-  uv.classList.add('extra');
-  const uvImage = document.createElement('img');
-  uvImage.src = uvIcon;
-  uv.appendChild(uvImage);
-  const uvText = document.createElement('p');
-  uvText.innerText = 'UV Index';
-  uv.appendChild(uvText);
-  const uvVal = document.createElement('p');
-  uvVal.innerText = uvIndex;
-  uv.appendChild(uvVal);
-  extraData.appendChild(uv);
-
-  const humid = document.createElement('div');
-  humid.classList.add('extra');
-  humid.classList.add('middle');
-  const humidImage = document.createElement('img');
-  humidImage.src = humidIcon;
-  humid.appendChild(humidImage);
-  const humidText = document.createElement('p');
-  humidText.innerText = 'Humidity';
-  humid.appendChild(humidText);
-  const humidVal = document.createElement('p');
-  humidVal.innerText = humidity;
-  humid.appendChild(humidVal);
-  extraData.appendChild(humid);
-
-  const windSpeed = document.createElement('div');
-  windSpeed.classList.add('extra');
-  const windImage = document.createElement('img');
-  windImage.src = windIcon;
-  windSpeed.appendChild(windImage);
-  const windText = document.createElement('p');
-  windText.innerText = 'Wind';
-  windSpeed.appendChild(windText);
-  const windVal = document.createElement('p');
-  windVal.innerText = wind;
-  windSpeed.appendChild(windVal);
-  extraData.appendChild(windSpeed);
-
-  return extraData;
+// This function renders an error message to display if the data cannot be fetched from the api;
+function renderErrorMessage() {
+  const errorMessage = document.createElement('p');
+  errorMessage.classList.add('error');
+  errorMessage.innerText =
+    'Possible issues: Invalid location, server down, network error.';
+  return errorMessage;
 }
 
+// This function delays the exuction of the renderContent function so that the loading animation is displayed for a reasonable amount of time;
 function load() {
   return new Promise((resolve) => setTimeout(resolve, 750));
 }
 
+// This function attempts to fetch data from the weather api by calling one of the 'getForecast' functions, upon success it renders the recieved data, upon failure it displays an error message;
 async function renderContent(location) {
   const body = document.querySelector('body');
+
   const loader = document.createElement('div');
   loader.classList.add('loader');
   body.appendChild(loader);
 
-  const currentDetails = document.querySelector('main');
+  const currentContent = document.querySelector('main');
+  if (currentContent) currentContent.replaceChildren();
+
   const scale = getScale();
-  if (currentDetails) currentDetails.replaceChildren();
+
   const data =
     scale === 'metric'
       ? await getForecastWeatherMetric(location)
@@ -221,38 +269,26 @@ async function renderContent(location) {
   await load();
 
   const main = document.createElement('main');
+
   if (data) {
     const { currentWeather, hourlyForecast, futureWeather } = data;
-    const current = renderCurrentWeather(currentWeather);
-    main.appendChild(current);
-    const hourly = renderHourlyForecast(hourlyForecast);
-    main.appendChild(hourly);
-    const future = renderFutureWeather(futureWeather);
-    main.appendChild(future);
-    const extra = renderExtraData(currentWeather);
-    main.appendChild(extra);
-    const astro = renderAstroData(currentWeather);
-    main.appendChild(astro);
-    if (currentDetails) {
-      body.replaceChild(main, currentDetails);
-    } else {
-      body.appendChild(main);
-    }
+    main.appendChild(renderCurrentWeather(currentWeather));
+    main.appendChild(renderHourlyForecast(hourlyForecast));
+    main.appendChild(renderFutureWeather(futureWeather));
+    main.appendChild(renderExtraData(currentWeather));
+    main.appendChild(renderAstroData(currentWeather));
+    currentContent
+      ? body.replaceChild(main, currentContent)
+      : body.appendChild(main);
   } else {
-    const errorMessage = document.createElement('p');
-    errorMessage.classList.add('error');
-    errorMessage.innerText =
-      'Possible issues: Invalid location, server down, network error.';
-
-    const currentDetails = document.querySelector('main');
-    if (currentDetails) {
-      currentDetails.replaceChildren();
-      currentDetails.appendChild(errorMessage);
+    if (currentContent) {
+      currentContent.appendChild(renderErrorMessage());
     } else {
-      main.appendChild(errorMessage);
+      main.appendChild(renderErrorMessage());
       body.appendChild(main);
     }
   }
+
   body.removeChild(loader);
 }
 
