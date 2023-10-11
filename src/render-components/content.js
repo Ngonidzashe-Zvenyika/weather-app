@@ -245,6 +245,7 @@ function renderErrorMessage() {
 
 // This function delays the exuction of the renderContent function so that the loading animation is displayed for a reasonable amount of time;
 function load() {
+  const body = document.querySelector('body');
   return new Promise((resolve) => setTimeout(resolve, 750));
 }
 
@@ -252,6 +253,7 @@ function load() {
 async function renderContent(location) {
   const body = document.querySelector('body');
 
+  body.style.pointerEvents = 'none';
   const loader = document.createElement('div');
   loader.classList.add('loader');
   body.appendChild(loader);
@@ -290,6 +292,7 @@ async function renderContent(location) {
   }
 
   body.removeChild(loader);
+  body.style.pointerEvents = 'auto';
 }
 
 export { renderContent };
