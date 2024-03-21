@@ -606,7 +606,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \**********************/
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.css */ \"./src/style.css\");\n/* harmony import */ var _render_components_render_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./render-components/render.js */ \"./src/render-components/render.js\");\n\n\n(0,_render_components_render_js__WEBPACK_IMPORTED_MODULE_1__.renderApplication)('Harare'); // This call launches the application with an initial location of 'Harare';\n\n\n//# sourceURL=webpack://weather-app/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.css */ \"./src/style.css\");\n/* harmony import */ var _render_components_render_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./render-components/render.js */ \"./src/render-components/render.js\");\n\n\n(0,_render_components_render_js__WEBPACK_IMPORTED_MODULE_1__.renderApplication)('Stellenbosch'); // This call launches the application with an initial location of 'Stellenbosch';\n\n\n//# sourceURL=webpack://weather-app/./src/index.js?");
 
 /***/ }),
 
