@@ -3,7 +3,7 @@ import { getScale } from './render.js';
 import { setScale } from './render.js';
 import { renderContent } from './content.js';
 
-let currentLocation = 'Harare';
+let currentLocation = 'Stellenbosch';
 
 // This function renders the search bar as a form for input validation. It then listens for a valid submission event upon which it uses the input value to search for the weather at the desired location;
 function renderSearchBar() {
